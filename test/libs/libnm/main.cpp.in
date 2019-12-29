@@ -1,0 +1,4 @@
+#define BOOST_TEST_MODULE libnmTestModule
+
+//&!off ${libnm_TEST_CASES}
+//&!on

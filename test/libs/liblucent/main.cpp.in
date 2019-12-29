@@ -1,0 +1,4 @@
+#define BOOST_TEST_MODULE liblucentTestModule
+
+//&!off ${liblucent_TEST_CASES}
+//&!on
