@@ -2,7 +2,7 @@
 
 #ifdef _WIN32
 #  ifdef LIBLUCENT_DLL
-#    if LIBLUCENT_BUILD
+#    ifdef LIBLUCENT_BUILD
 #      define LIBLUCENT_API __declspec(dllexport)
 #      define INFO_LOCAL
 #    else
@@ -15,7 +15,7 @@
 #  endif
 #else
 #  ifdef LIBLUCENT_DLL
-#    if LIBLUCENT_BUILD
+#    ifdef LIBLUCENT_BUILD
 #      define LIBLUCENT_API __attribute__((visibility("default")))
 #      define LIBLUCENT_LOCAL __attribute__((visibility("hidden")))
 #    else

@@ -1,6 +1,0 @@
-#ifndef INFODYNAMITE_LIBRARY_H
-#define INFODYNAMITE_LIBRARY_H
-
-void hello();
-
-#endif //INFODYNAMITE_LIBRARY_H

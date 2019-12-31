@@ -38,7 +38,7 @@ if (LIBNM_BUILD_SHARED)
     if (WIN32)
         if (("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
                 OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
-            target_link_options(lucent
+            target_link_options(nm
                     PUBLIC
                     -Wl,--exclude-all-symbols
                     )
@@ -46,7 +46,7 @@ if (LIBNM_BUILD_SHARED)
     endif ()
     add_definitions(-DLIBNM_DLL -DLIBNM_BUILD)
 endif ()
-
+set_target_properties(nm PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Add Dependencies
 add_dependencies(nm magic_enum)

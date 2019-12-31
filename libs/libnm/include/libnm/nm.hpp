@@ -8,12 +8,13 @@
 #include <string_view>
 #include <vector>
 #include <array>
-
-#include "_api.hpp"
+#include <memory>
 
 #ifndef _WIN32
 #  include <elf.h>
 #endif
+
+#include "_api.hpp"
 
 /**
  * Contains code for libnm,

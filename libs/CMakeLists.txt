@@ -1,4 +1,4 @@
-set(INFO_DYNAMITE_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/libs")
+include(DependencyInclude.cmake)
 
 # Magic Enum - MIT license
 # https://github.com/Neargye/magic_enum
@@ -9,12 +9,11 @@ add_subdirectory(magic_enum)
 
 # Sprout - Boost 1.0 license
 # https://github.com/bolero-MURAKAMI/Sprout
-# Description: consexpr container, std library functions, and other fun stuff.
+# Description: constexpr container, std library functions, and other fun stuff.
 # Used by:
 #  - `libnm`: One part of the code requires one pow function in constexpr context
 add_subdirectory(sprout)
 # note: The supplied CMakeLists.txt does not define anything of the sort
-set(SPROUT_INCLUDE_DIR "${INFO_DYNAMITE_LIBRARY_DIR}/sprout/")
 
 # libnm - BSD 3-Clause license
 # Homegrown

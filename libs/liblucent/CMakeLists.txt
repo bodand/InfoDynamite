@@ -58,6 +58,7 @@ add_library(lucent ${LIBLUCENT_LIBRARY_TYPE}
 
 # Symbol hiding
 if (LIBLUCENT_BUILD_SHARED)
+    message(STATUS "Building liblucent as shared library")
     if (WIN32)
         if (("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
                 OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
@@ -69,6 +70,7 @@ if (LIBLUCENT_BUILD_SHARED)
     endif ()
     add_compile_definitions(LIBLUCENT_DLL LIBLUCENT_BUILD)
 endif ()
+set_target_properties(lucent PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Add Dependencies
 target_include_directories(lucent

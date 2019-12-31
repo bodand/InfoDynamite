@@ -6,88 +6,69 @@ set(CMAKE_CXX_STANDARD 20)
 option(INFO_DYNAMITE_BUILD_SHARED "Build InfoDynamite as shared library" On)
 option(INFO_BUILD_TESTS "Build the tests of InfoDynamite and libnm" On)
 
+if (INFO_DYNAMITE_BUILD_SHARED)
+    set(INFO_DYNAMITE_LIBRARY_TYPE SHARED)
+else ()
+    set(INFO_DYNAMITE_LIBRARY_TYPE STATIC)
+endif ()
+
+
+# Get the dependencies
 include(cmake/Dependencies.cmake)
 GetDependencies()
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_compile_options(
-            -Wall
-            -Wextra
-            -Wsign-compare
-            -Wswitch-enum
-            -Wuninitialized
-            -Wunused
-            -Wno-unknown-pragmas
-            -Wcast-qual
-            -Wcast-align
-            -Wabstract-vbase-init
-            -Warray-bounds-pointer-arithmetic
-            -Wassign-enum
-            -Wconditional-uninitialized
-            -Wconsumed
-            -Wdeprecated-implementations
-            -Wdocumentation-deprecated-sync
-            -Wnon-virtual-dtor
-            -Wheader-hygiene
-            -Winfinite-recursion
-            -Wkeyword-macro
-            -Wloop-analysis
-            -Wmissing-braces
-            -Wmove
-            -Wnewline-eof
-            -Wover-aligned
-            -Wredundant-parens
-            -Wreorder
-            -Wreserved-id-macro
-            -Wsign-conversion
-            -Wsigned-enum-bitfield
-            -Wsometimes-uninitialized
-            -Wtautological-overlap-compare
-            -Wthread-safety
-            -Wundefined-internal-type
-            -Wundefined-reinterpret-cast
-            -Wunneeded-internal-declaration
-            -Wunreachable-code-aggressive
-            -Wunreachable-code-loop-increment
-            -Wunused-const-variable
-            -Wunused-exception-parameter
-            -Wunused-label
-            -Wunused-parameter
-            -Wunused-private-field
-            -Wunused-lambda-capture
-            -Wunused-template
-            -Wunused-variable
-            -Wused-but-marked-unused
-            -pedantic
-    )
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_compile_options(
-            -Wall
-            -Wextra
-            -Wswitch-enum
-            -Wuninitialized
-            -Wunused
-            -Wno-unknown-pragmas
-            -Wsuggest-attribute=pure
-            -Wsuggest-attribute=const
-            -Wsuggest-attribute=cold
-            -Wsuggest-final-types
-            -Wsuggest-final-methods
-            -Wduplicated-branches
-            -Wtrampolines
-            -Wplacement-new=2
-            -Wcast-qual
-            -Wcast-align
-            -Wlogical-op
-            -Wredundant-decls
-            -pedantic
-    )
+# Add non-default compiler warnings
+include(cmake/Warnings.cmake)
+
+# Add dependencies
+add_subdirectory(libs)
+include(libs/DependencyInclude.cmake)
+
+# Register library
+add_library(dynamite ${INFO_DYNAMITE_LIBRARY_TYPE}
+        src/DynamicLibrary.cpp
+        )
+
+# Symbol management
+if (INFO_DYNAMITE_BUILD_SHARED)
+    message(STATUS "Building InfoDynamite as shared library")
+    if (WIN32)
+        if (("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+                OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+            target_link_options(dynamite
+                    PUBLIC
+                    -Wl,--exclude-all-symbols
+                    )
+        endif ()
+    endif ()
+    add_definitions(-DINFO_DYNAMITE_DLL -DINFO_DYNAMITE_BUILD)
+endif ()
+set_target_properties(dynamite PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Set includes
+target_include_directories(dynamite
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+
+        PRIVATE
+        ${LIBNM_INCLUDE_DIR}
+        ${LIBLUCENT_INCLUDE_DIR}
+        src
+        )
+
+# Link settings
+set(DYNAMITE_LINK_LIBRARIES nm lucent)
+
+if (WIN32)
+    set(DYNAMITE_LINK_LIBRARIES ${DYNAMITE_LINK_LIBRARIES} kernel32)
+else ()
+    set(DYNAMITE_LINK_LIBRARIES ${DYNAMITE_LINK_LIBRARIES} dl)
 endif ()
 
-add_subdirectory(libs)
+target_link_libraries(dynamite ${DYNAMITE_LINK_LIBRARIES})
 
-add_library(dynamite SHARED library.cpp library.h)
-
+# Testing setup
 if (INFO_BUILD_TESTS)
     add_subdirectory(test)
 endif ()
