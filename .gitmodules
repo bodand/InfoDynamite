@@ -1,0 +1,6 @@
+[submodule "libs/magic_enum"]
+	path = libs/magic_enum
+	url = https://github.com/Neargye/magic_enum.git
+[submodule "libs/sprout"]
+    path = libs/sprout
+    url = https://github.com/bolero-MURAKAMI/Sprout.git

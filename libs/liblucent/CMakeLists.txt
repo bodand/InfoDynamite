@@ -15,7 +15,7 @@ else ()
 endif ()
 
 # Init Dependencies
-find_package(Boost REQUIRED regex)
+find_package(Boost REQUIRED)
 
 # Check stdlib implementation
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
@@ -55,6 +55,20 @@ add_library(lucent ${LIBLUCENT_LIBRARY_TYPE}
         src/lucent.cpp
         src/${LIBLUCENT_STDLIB_DEPENDENT_SOURCE_DIR}/demangler.cpp
         )
+
+# Symbol hiding
+if (LIBLUCENT_BUILD_SHARED)
+    if (WIN32)
+        if (("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+                OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+            target_link_options(lucent
+                    PUBLIC
+                    -Wl,--exclude-all-symbols
+                    )
+        endif ()
+    endif ()
+    add_compile_definitions(LIBLUCENT_DLL LIBLUCENT_BUILD)
+endif ()
 
 # Add Dependencies
 target_include_directories(lucent

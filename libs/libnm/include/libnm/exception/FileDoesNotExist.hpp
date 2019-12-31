@@ -8,12 +8,14 @@
 #include <string>
 #include <string_view>
 
+#include "libnm/_api.hpp"
+
 namespace libnm {
-  struct file_not_object : std::exception {
+  struct LIBNM_API file_does_not_exist : std::exception {
       [[nodiscard]]
       const char* what() const noexcept override;
 
-      explicit file_not_object(std::string_view filename);
+      explicit file_does_not_exist(std::string_view filename);
   private:
       std::string _filename;
   };

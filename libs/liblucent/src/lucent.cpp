@@ -5,6 +5,7 @@
 #include "include.hpp"
 #include LIBLUCENT_INCLUDE_HEADER(lucent.hpp)
 
+LIBLUCENT_LOCAL
 bool liblucent::detail::balanced_parens(std::string_view str) {
     unsigned found{0};
     for (const auto& ch : str) {

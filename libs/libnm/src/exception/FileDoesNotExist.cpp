@@ -4,7 +4,10 @@
 
 #include <utility>
 
-#include "../include/libnm/FileDoesNotExist.hpp"
+#include "include.hpp"
+//&!off
+#include LIBNM_INCLUDE_HEADER_N(exception/FileDoesNotExist.hpp)
+//&!on
 
 const char* libnm::file_does_not_exist::what() const noexcept {
     static std::string ret;

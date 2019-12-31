@@ -2,6 +2,8 @@
 // Created by tudom on 2019-12-28.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #pragma once
 
 #pragma clang diagnostic push
@@ -35,5 +37,7 @@ BOOST_AUTO_TEST_SUITE(Demangler)
   }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#pragma clang diagnostic pop
 
 #pragma clang diagnostic pop

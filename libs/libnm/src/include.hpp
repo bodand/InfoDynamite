@@ -9,3 +9,6 @@
 #define LIBNM_INCLUDE_HEADER(header) \
     BOOST_PP_STRINGIZE(../include/libnm/header)
 
+#define LIBNM_INCLUDE_HEADER_N(header) \
+    BOOST_PP_STRINGIZE(../../include/libnm/header)
+

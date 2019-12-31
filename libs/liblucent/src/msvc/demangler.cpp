@@ -9,6 +9,7 @@
 #include <dbghelp.h>
 #include <stack>
 
+LIBLUCENT_API
 std::string liblucent::Demangle(std::string_view name) {
     using detail::balanced_parens;
 

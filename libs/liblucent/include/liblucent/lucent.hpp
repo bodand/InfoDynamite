@@ -6,6 +6,7 @@
 
 #include <string>
 #include <string_view>
+#include "_api.hpp"
 
 /**
  * Library for the in-house demangler function.
@@ -30,10 +31,11 @@ namespace liblucent {
    * \return The demangled name if the process is successful, otherwise the input
    *          string.
    */
-  [[nodiscard]]
+  [[nodiscard]] LIBLUCENT_API
   std::string Demangle(std::string_view);
 
   namespace detail {
+    [[nodiscard]] LIBLUCENT_LOCAL
     bool balanced_parens(std::string_view);
   }
 }

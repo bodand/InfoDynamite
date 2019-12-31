@@ -7,6 +7,7 @@
 
 #include <cxxabi.h>
 
+LIBLUCENT_API
 std::string liblucent::Demangle(std::string_view name) {
     int succ;
     auto _d = abi::__cxa_demangle(name.data(), nullptr, nullptr, &succ);

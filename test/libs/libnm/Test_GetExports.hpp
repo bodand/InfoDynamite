@@ -2,6 +2,8 @@
 // Created by bodand on 2019-12-22.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #pragma once
 
 #pragma clang diagnostic push
@@ -10,8 +12,8 @@
 
 #include <boost/test/included/unit_test.hpp>
 #include "../../../libs/libnm/include/libnm/nm.hpp"
-#include "../../../libs/libnm/include/libnm/FileNotObject.hpp"
-#include "../../../libs/libnm/include/libnm/FileDoesNotExist.hpp"
+#include "libnm/exception/FileNotObject.hpp"
+#include "libnm/exception/FileDoesNotExist.hpp"
 
 BOOST_AUTO_TEST_SUITE(libnm_test)
   using namespace libnm;
@@ -65,5 +67,7 @@ BOOST_AUTO_TEST_SUITE(libnm_test)
   }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#pragma clang diagnostic pop
 
 #pragma clang diagnostic pop

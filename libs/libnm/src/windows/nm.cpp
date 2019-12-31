@@ -2,13 +2,17 @@
 // Created by tudom on 2019-12-22.
 //
 
-#include "libnm/nm.hpp"
+#include "../include.hpp"
+
+#include LIBNM_INCLUDE_HEADER_N(nm.hpp)
 
 #include <windows.h>
 #include <imagehlp.h>
+#include <array>
 
-std::vector <std::string> libnm::detail::ListExports(std::string_view file) noexcept {
-    std::vector <std::string> ret{};
+LIBNM_LOCAL
+std::vector<std::string> libnm::detail::ListExports(std::string_view file) {
+    std::vector<std::string> ret{};
 
     DWORD* dNameRVAs{nullptr};
     _IMAGE_EXPORT_DIRECTORY* ImageExportDirectory;
@@ -36,6 +40,7 @@ std::vector <std::string> libnm::detail::ListExports(std::string_view file) noex
     return ret;
 }
 
+LIBNM_API
 bool libnm::IsSharedObject(std::string_view file) noexcept {
     return file.ends_with(".dll");
 }
