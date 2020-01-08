@@ -17,10 +17,6 @@ set(CMAKE_BUILD_RPATH "$ORIGIN:${CMAKE_BINARY_DIR}:${CMAKE_BUILD_RPATH}")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
-# Get the dependencies
-include(cmake/Dependencies.cmake)
-GetDependencies()
-
 # Add non-default compiler warnings
 include(cmake/Warnings.cmake)
 
