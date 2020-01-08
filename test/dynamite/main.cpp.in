@@ -1,4 +1,12 @@
 #define BOOST_TEST_MODULE DynamiteTestModule
 
+#ifdef INFO_DYNAMITE_BUILD
+#  undef INFO_DYNAMITE_BUILD
+#endif
+
+#ifdef INFO_DYNAMITE_BUILD_DLL
+#  undef INFO_DYNAMITE_BUILD_DLL
+#endif
+
 //&!off ${INFO_DYNAMITE_TEST_CASES}
 //&!on

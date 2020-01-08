@@ -11,39 +11,32 @@
 
 // project headers
 #include "_api.hpp"
+#include "FunctionTypes.hpp"
 
 namespace info::dynamite {
+  struct INFO_DYNAMITE_API DynamicFunction;
+
   struct INFO_DYNAMITE_API DynamicLibrary {
       // functions
-      [[nodiscard]]
-      std::string name() const noexcept;
-      [[nodiscard]]
-      std::string winName() const noexcept;
-      [[nodiscard]]
-      std::string osxName() const noexcept;
-      [[nodiscard]]
-      std::string elfName() const noexcept;
+      std::string name[[nodiscard]]() const noexcept;
+      std::string winName[[nodiscard]]() const noexcept;
+      std::string osxName[[nodiscard]]() const noexcept;
+      std::string elfName[[nodiscard]]() const noexcept;
 
-      [[nodiscard]]
-      std::vector<std::string> functions() const noexcept;
-      [[nodiscard]]
-      std::vector<std::string> demangled() const noexcept;
+      std::vector <std::string> functions[[nodiscard]]() const noexcept;
+      std::vector <std::string> demangled[[nodiscard]]() const noexcept;
+
+      DynamicFunction getFunction[[nodiscard]](std::string_view) const;
 
       // accessors
-      [[nodiscard]]
-      std::string& rawName() noexcept;
-      [[nodiscard]]
-      const std::string& rawName() const noexcept;
+      std::string& rawName[[nodiscard]]() noexcept;
+      const std::string& rawName[[nodiscard]]() const noexcept;
 
-      [[nodiscard]]
-      bool& prefix() noexcept;
-      [[nodiscard]]
-      const bool& prefix() const noexcept;
+      bool& prefix[[nodiscard]]() noexcept;
+      const bool& prefix[[nodiscard]]() const noexcept;
 
-      [[nodiscard]]
-      void* lib() noexcept;
-      [[nodiscard]]
-      const void* lib() const noexcept;
+      void* lib[[nodiscard]]() noexcept;
+      const void* lib[[nodiscard]]() const noexcept;
 
       // constructors
       explicit DynamicLibrary(std::string, bool = true) noexcept;
@@ -55,15 +48,22 @@ namespace info::dynamite {
       bool _prefix;
       void* _lib;
 
-      mutable std::optional<std::vector<std::string>> _cacheFunctions;
-      mutable std::optional<std::vector<std::string>> _cacheDemangled;
+      mutable std::optional <std::vector<std::string>> _cacheFunctions;
+      mutable std::optional <std::vector<std::string>> _cacheDemangled;
 
-      [[nodiscard]]
-      std::string prefixName() const noexcept;
+      INFO_DYNAMITE_LOCAL
+      std::string prefixName[[nodiscard]]() const noexcept;
 
+      INFO_DYNAMITE_LOCAL
+      AbstractFunction loadFunction[[nodiscard]](std::string_view) const;
+
+      INFO_DYNAMITE_LOCAL
       static constexpr const auto LibPrefix = "lib";
+      INFO_DYNAMITE_LOCAL
       static constexpr const auto WinSuffix = ".dll";
+      INFO_DYNAMITE_LOCAL
       static constexpr const auto OSXSuffix = ".dylib";
+      INFO_DYNAMITE_LOCAL
       static constexpr const auto ELFSuffix = ".so";
   };
 }

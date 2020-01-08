@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 project(InfoDynamite)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -12,6 +12,10 @@ else ()
     set(INFO_DYNAMITE_LIBRARY_TYPE STATIC)
 endif ()
 
+set(CMAKE_SKIP_RPATH FALSE)
+set(CMAKE_BUILD_RPATH "$ORIGIN:${CMAKE_BINARY_DIR}:${CMAKE_BUILD_RPATH}")
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Get the dependencies
 include(cmake/Dependencies.cmake)
@@ -27,6 +31,8 @@ include(libs/DependencyInclude.cmake)
 # Register library
 add_library(dynamite ${INFO_DYNAMITE_LIBRARY_TYPE}
         src/DynamicLibrary.cpp
+        src/DynamicFunction.cpp
+        src/exception/NoSuchFunction.cpp
         )
 
 # Symbol management
@@ -41,7 +47,8 @@ if (INFO_DYNAMITE_BUILD_SHARED)
                     )
         endif ()
     endif ()
-    add_definitions(-DINFO_DYNAMITE_DLL -DINFO_DYNAMITE_BUILD)
+
+    add_definitions(-DINFO_DYNAMITE_DLL -DINFO_DYNAMITE_BUILD_DLL)
 endif ()
 set_target_properties(dynamite PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

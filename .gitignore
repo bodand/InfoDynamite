@@ -2,6 +2,9 @@
 ### Build dirs
 cmake-build-*/
 
+### Configured files
+test/**/main.cpp
+
 ### JetBrains
 .idea/
 *.iml

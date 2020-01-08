@@ -70,5 +70,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
             -Wlogical-op
             -Wredundant-decls
             -pedantic
+            # special project level extension
+            -Wno-cast-function-type
     )
 endif ()

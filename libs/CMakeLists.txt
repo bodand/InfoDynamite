@@ -7,14 +7,6 @@ include(DependencyInclude.cmake)
 #  - `libnm`: The arch endianness is an enum whose handling is eased
 add_subdirectory(magic_enum)
 
-# Sprout - Boost 1.0 license
-# https://github.com/bolero-MURAKAMI/Sprout
-# Description: constexpr container, std library functions, and other fun stuff.
-# Used by:
-#  - `libnm`: One part of the code requires one pow function in constexpr context
-add_subdirectory(sprout)
-# note: The supplied CMakeLists.txt does not define anything of the sort
-
 # libnm - BSD 3-Clause license
 # Homegrown
 # Description:

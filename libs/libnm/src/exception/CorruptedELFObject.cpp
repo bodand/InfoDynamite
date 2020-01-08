@@ -6,9 +6,6 @@
 #include <charconv>
 #include <array>
 
-#include <sprout/math/pow.hpp>
-#include <sprout/math/iround.hpp>
-
 #include "../include.hpp"
 //&!off
 #include LIBNM_INCLUDE_HEADER_N(exception/CorruptedELFObject.hpp)
@@ -20,11 +17,38 @@ const char* libnm::corrupted_elf_object::what() const noexcept {
 
 template<class T>
 LIBNM_LOCAL
-constexpr auto cs(T i) -> T {
-    if (i >= 10) {
-        return 1 + cs(i % 10);
+constexpr auto g10d(T i) {
+    auto d = 10;
+    while (i % d != i) {
+        d *= 10;
     }
-    return 1;
+    return d / 10;
+}
+
+template<class T>
+LIBNM_LOCAL
+constexpr auto sl(T i)
+-> T {
+if (i >= 10) {
+return 1 +
+sl(i
+%
+g10d(i)
+);
+}
+return 1;
+}
+
+template<class T>
+LIBNM_LOCAL
+inline constexpr T
+pow(T
+const& x,
+std::size_t n
+) {
+return n > 0 ?
+x* pow(x, n - 1)
+: 1;
 }
 
 const char* libnm::unexplainable_elf_bit_format::what() const noexcept {
@@ -34,9 +58,7 @@ const char* libnm::unexplainable_elf_bit_format::what() const noexcept {
 }
 
 libnm::unexplainable_elf_bit_format::unexplainable_elf_bit_format(uint8_t byte) {
-    namespace sm = sprout::math;
-
-    std::array<char, cs(sm::iround<std::size_t>(sm::pow(2, sizeof(byte))))> tmpString{};
+    std::array < char, sl(pow(2, sizeof(byte))) > tmpString{};
     if (auto[end, ec] = std::to_chars(tmpString.data(), tmpString.data() + tmpString.size(), byte);
            ec == std::errc()) {
         _byte = {tmpString.data(), static_cast<std::size_t>(end - tmpString.data())};
