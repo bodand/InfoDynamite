@@ -16,5 +16,7 @@ std::string liblucent::Demangle(std::string_view name) {
         return std::string{name};
     }
 
-    return std::string{_d};
+    auto ret = std::string{_d};
+
+    return free(_d), ret;
 }
