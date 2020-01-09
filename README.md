@@ -1,4 +1,4 @@
-<center><h1>InfoDynamite</h1></center>
+<center> <h1>InfoDynamite</h1> </center>
 
 ---
 
@@ -36,9 +36,15 @@ Under construction; see you soon:tm:.
 # License
 
 InfoDynamite is licensed under the BSD 3-Clause license, available for inspection in
-the supplied `LICENSE` file.
-The external dependency [`magic_enum`][me] is licensed under the MIT License, available for
-inspection in the supplied `LICENSE.magic_enum` file.
+the supplied `LICENSE` file.  
 
+## Dependency Licenses
+
+ - The external dependency [`magic_enum`][me] is licensed under the MIT License, available for
+   inspection in the supplied `LICENSE.magic_enum` file.  
+ - The local dependency `libnm` is licensed under the BSD 3-Clause license,
+   available for inspection in the supplied `LICENSE` file.  
+ - The local dependency `liblucent` is licensed under the BSD 3-Clause license, 
+   available for inspection in the supplied `LICENSE` file.  
 
 [me]: https://github.com/Neargye/magic_enum
