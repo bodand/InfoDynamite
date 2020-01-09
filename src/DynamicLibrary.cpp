@@ -27,94 +27,84 @@ info::dynamite::DynamicLibrary::DynamicLibrary(std::string name, bool prefix) no
        : _rawName{std::move(name)},
          _prefix{prefix} {
 #ifdef _WIN32
-    _lib = LoadLibrary(this->name().c_str());;
+    _lib = LoadLibrary(this->name().c_str());
 #else
     _lib = dlopen(this->name().c_str(), RTLD_NOW | RTLD_GLOBAL);
 #endif
 }
 
 INFO_DYNAMITE_LOCAL
-       std::string
+std::string
 info::dynamite::DynamicLibrary::prefixName[[nodiscard]]() const noexcept {
-if (_prefix) {
-return LibPrefix +
-_rawName;
-}
-return
-_rawName;
+    if (_prefix) {
+        return LibPrefix + _rawName;
+    }
+    return _rawName;
 }
 
 INFO_DYNAMITE_API
-       std::string
+std::string
 info::dynamite::DynamicLibrary::elfName[[nodiscard]]() const noexcept {
-return
-prefixName()
-+
-ELFSuffix;
+    return prefixName() + ELFSuffix;
 }
 
 INFO_DYNAMITE_API
-       std::string
+std::string
 info::dynamite::DynamicLibrary::osxName[[nodiscard]]() const noexcept {
-return
-prefixName()
-+
-OSXSuffix;
+    return prefixName() + OSXSuffix;
 }
 
 INFO_DYNAMITE_API
-       std::string
+std::string
 info::dynamite::DynamicLibrary::winName[[nodiscard]]() const noexcept {
-return
-prefixName()
-+
-WinSuffix;
+    return prefixName() + WinSuffix;
 }
 
 INFO_DYNAMITE_API
-       std::string
+std::string
 info::dynamite::DynamicLibrary::name[[nodiscard]]() const noexcept {
 #ifdef _WIN32
-return winName();
+    return winName();
 #elif defined(__APPLE__)
-return osxName();
+    return osxName();
 #else
-return
-elfName();
+    return elfName();
 #endif
 }
 
 INFO_DYNAMITE_API
-       std::string
-& info::dynamite::DynamicLibrary::rawName[[nodiscard]]() noexcept {
-return
-_rawName;
+std::string&
+info::dynamite::DynamicLibrary::rawName[[nodiscard]]() noexcept {
+    return _rawName;
 }
 
 INFO_DYNAMITE_API
-bool& info::dynamite::DynamicLibrary::prefix[[nodiscard]]() noexcept {
+bool&
+info::dynamite::DynamicLibrary::prefix[[nodiscard]]() noexcept {
     return _prefix;
 }
 
 INFO_DYNAMITE_API
-const bool& info::dynamite::DynamicLibrary::prefix[[nodiscard]]() const noexcept {
+const bool&
+info::dynamite::DynamicLibrary::prefix[[nodiscard]]() const noexcept {
     return _prefix;
 }
 
 INFO_DYNAMITE_API
-const std::string
-& info::dynamite::DynamicLibrary::rawName[[nodiscard]]() const noexcept {
-return
-_rawName;
+const std::string&
+info::dynamite::DynamicLibrary::rawName[[nodiscard]]() const noexcept {
+    return _rawName;
 }
 
 INFO_DYNAMITE_API
-void* info::dynamite::DynamicLibrary::lib[[nodiscard]]() noexcept {
+void*
+info::dynamite::DynamicLibrary::lib[[nodiscard]]() noexcept {
     return _lib;
 }
 
 INFO_DYNAMITE_API
-const void* info::dynamite::DynamicLibrary::lib[[nodiscard]]() const noexcept {
+const void*
+info::dynamite::DynamicLibrary::lib[[nodiscard]]() const noexcept {
     return _lib;
 }
 
@@ -130,82 +120,61 @@ info::dynamite::DynamicLibrary::~DynamicLibrary() {
 }
 
 INFO_DYNAMITE_API
-       std::vector<std::string>
+std::vector<std::string>
 info::dynamite::DynamicLibrary::functions[[nodiscard]]() const noexcept {
-if (!_cacheFunctions) {
-_cacheFunctions = libnm::GetExports(name());
-}
-return *
-_cacheFunctions;
+    if (!_cacheFunctions) {
+        _cacheFunctions = libnm::GetExports(name());
+    }
+    return *_cacheFunctions;
 }
 
 INFO_DYNAMITE_API
-       std::vector<std::string>
+std::vector<std::string>
 info::dynamite::DynamicLibrary::demangled[[nodiscard]]() const noexcept {
-if (!_cacheDemangled) {
-auto fs = functions();
-_cacheDemangled = std::vector < std::string > {};
+    if (!_cacheDemangled) {
+        auto fs = functions();
+        _cacheDemangled = std::vector<std::string>{};
 
-std::transform(fs
-.
-begin(), fs
-.
-end(),
-       std::back_inserter(*_cacheDemangled),
-[](
-std::string_view mangled
-) {
-return
-liblucent::Demangle(mangled);
-});
-}
-return *
-_cacheDemangled;
+        std::transform(fs.begin(), fs. end(),
+                       std::back_inserter(*_cacheDemangled),
+                       [](std::string_view mangled) {
+                         return liblucent::Demangle(mangled);
+                       });
+    }
+    return *_cacheDemangled;
 }
 
 INFO_DYNAMITE_API
-       info::dynamite::DynamicFunction
-info::dynamite::DynamicLibrary::getFunction[[nodiscard]](std::string_view
-fname) const {
-auto fs = functions();
-auto ds = this->demangled();
+info::dynamite::DynamicFunction
+info::dynamite::DynamicLibrary::getFunction[[nodiscard]](std::string_view fname) const {
+    auto fs = functions();
+    auto ds = this->demangled();
 
-auto position = ([&] {
-  decltype(auto) pos = std::find(ds.begin(), ds.end(), fname);
+    auto position = ([&] {
+      decltype(auto) pos = std::find(ds.begin(), ds.end(), fname);
 
-  if (pos == ds.end())
-      throw no_such_function{fname.data()};
+      if (pos == ds.end())
+          throw no_such_function{fname.data()};
 
-  return std::distance(ds.begin(), pos);
-})();
+      return std::distance(ds.begin(), pos);
+    })();
 
-BOOST_ASSERT(static_cast
-<unsigned long long>(position)
-< ds.
-size()
-);
+    BOOST_ASSERT(static_cast<unsigned long long>(position) < ds.size());
 
-auto ret = DynamicFunction{
-       loadFunction(fs[static_cast<std::size_t>(position)]),
-       ds[static_cast<std::size_t>(position)]
-};
-
-return
-ret;
+    return {
+           loadFunction(fs[static_cast<std::size_t>(position)]),
+           ds[static_cast<std::size_t>(position)]
+    };
 }
 
 INFO_DYNAMITE_LOCAL
-       info::dynamite::AbstractFunction
-info::dynamite::DynamicLibrary::loadFunction[[nodiscard]](std::string_view
-name) const {
-BOOST_ASSERT(_lib
-!= nullptr);
+info::dynamite::AbstractFunction
+info::dynamite::DynamicLibrary::loadFunction[[nodiscard]](std::string_view name) const {
+    BOOST_ASSERT(_lib != nullptr);
 
 #ifdef _WIN32
-return reinterpret_cast<AbstractFunction>(GetProcAddress((HMODULE) _lib, name.data()));
+    return reinterpret_cast<AbstractFunction>(GetProcAddress((HMODULE) _lib, name.data()));
 #else
-return reinterpret_cast
-<AbstractFunction>(dlsym(_lib, name.data())
-);
+    return reinterpret_cast<AbstractFunction>(dlsym(_lib, name.data()));
 #endif
 }

@@ -12,33 +12,25 @@ info::dynamite::DynamicFunction::DynamicFunction(AbstractFunction handle, std::s
          _name{std::move(name)} {}
 
 INFO_DYNAMITE_API
-       info::dynamite::AbstractFunction
-&
-
+info::dynamite::AbstractFunction&
 info::dynamite::DynamicFunction::handle() noexcept {
     return _handle;
 }
 
 INFO_DYNAMITE_API
-const info::dynamite::AbstractFunction
-&
-
+const info::dynamite::AbstractFunction&
 info::dynamite::DynamicFunction::handle() const noexcept {
     return _handle;
 }
 
 INFO_DYNAMITE_API
-       std::string
-&
-
+std::string&
 info::dynamite::DynamicFunction::name() noexcept {
     return _name;
 }
 
 INFO_DYNAMITE_API
-const std::string
-&
-
+const std::string&
 info::dynamite::DynamicFunction::name() const noexcept {
     return _name;
 }

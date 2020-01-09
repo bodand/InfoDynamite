@@ -10,7 +10,8 @@
 //&!on
 
 INFO_DYNAMITE_API
-const char* info::dynamite::no_such_function::what[[nodiscard]]() const noexcept {
+const char*
+info::dynamite::no_such_function::what[[nodiscard]]() const noexcept {
     static std::string ret;
     ret = "Requested function `" + _function + "` not found.";
     return ret.c_str();
